@@ -45,6 +45,39 @@ public class ProductController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    /* ajout rapide via postman de plusieurs produits en meme temps
+
+
+    @PostMapping("/addProduct")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity<?> addProduct(@RequestBody Object request) {
+        System.out.println("Requête reçue pour ajouter un produit ou plusieurs produits : " + request);
+
+        try {
+            if (request instanceof List<?>) {
+                // Si la requête est une liste, on sauvegarde tous les produits
+                List<Product> newProducts = (List<Product>) request;
+                List<Product> savedProducts = productRepository.saveAll(newProducts);
+                System.out.println("Produits sauvegardés avec succès : " + savedProducts);
+                return new ResponseEntity<>(savedProducts, HttpStatus.CREATED);
+            } else if (request instanceof Product) {
+                // Si la requête est un seul produit, on le sauvegarde
+                Product newProduct = (Product) request;
+                Product savedProduct = productRepository.save(newProduct);
+                System.out.println("Produit sauvegardé avec succès : " + savedProduct);
+                return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Format de requête invalide", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur lors de l'ajout du produit : " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
+    *///
     
  // 3. READ (Par ID): Récupérer un produit par son ID
     @GetMapping("products/{id}")
@@ -59,26 +92,32 @@ public class ProductController {
     }
     
     // 3. READ (Par ID): Récupérer la liste des produits par categorie
-    @GetMapping("getProductByIdCategory/{categoryId}")
+    @GetMapping("/getProductByIdCategory/{categoryId}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity<List<Product>> getProductByIdCategory(@PathVariable (required = false) Long categoryId) {
-    
-    	 List<Product> productData;
-
-    	 
-    	    if (categoryId == null  ) {
-    	        // Si categoryId est null, retourner tous les produits
-    	        return ResponseEntity.ok(productRepository.findAll());
-    	    } else {
-    	         productData = productRepository.findByCategoryId(categoryId);
-    	        if (productData != null && !productData.isEmpty()) {
-    	            return ResponseEntity.ok(productData);
-    	        } else {
-    	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
-    	        }
-    	}
-    	    
+    public ResponseEntity<List<Product>> getProductByIdCategory(@PathVariable("categoryId") Long categoryId) {
+        List<Product> productData = productRepository.findByCategoryId(categoryId);
+        if (productData != null && !productData.isEmpty()) {
+            return ResponseEntity.ok(productData);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
+        }
     }
+//    @GetMapping("getProductByIdCategory/{categoryId}")
+//    @CrossOrigin(origins = "http://localhost:4200")
+//    public ResponseEntity<List<Product>> getProductByIdCategory(@RequestParam (value = "categoryId", required = false) Long categoryId) {
+//    	 List<Product> productData;
+//    	    if (categoryId == null  ) {
+//    	        // Si categoryId est null, retourner tous les produits
+//    	        return ResponseEntity.ok(productRepository.findAll());
+//    	    } else {
+//    	         productData = productRepository.findByCategoryId(categoryId);
+//    	        if (productData != null && !productData.isEmpty()) {
+//    	            return ResponseEntity.ok(productData);
+//    	        } else {
+//    	            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
+//    	        }
+//    	}
+//    }
 
 
     	

@@ -1,6 +1,7 @@
 package com.catalogue.produits.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.*;
@@ -22,8 +23,9 @@ public class Product {
 
     @Column(nullable = false)
     private double price;
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne
+	@JsonIgnoreProperties("products")
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
     

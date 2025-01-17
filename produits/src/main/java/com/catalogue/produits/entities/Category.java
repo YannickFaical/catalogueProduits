@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,11 +24,16 @@ public class Category {
 
     @Column(nullable = false, unique = true)
     private String name;
-   
+	@JsonBackReference
+	//@JsonIgnore
     @OneToMany(mappedBy = "category")
     @Column
     private List<Product> products;
-    
+
+	public Category() {
+
+	}
+
 	public Long getId() {
 		return id;
 	}
